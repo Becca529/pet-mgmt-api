@@ -2,3 +2,9 @@ language: node_js
  node_js: node
  services:
      - mongodb
+deploy:
+  provider: heroku
+  edge: true
+  app: safe-ocean-88442
+  on:
+    repo: Becca529/pet-mgmt-api
