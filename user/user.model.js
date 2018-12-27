@@ -5,8 +5,8 @@ mongoose.Promise = global.Promise;
 
 //Creates mongoose user schema
 const userSchema = mongoose.Schema({
-    firstname: { type: String, required: true },
-    lastname: { type: String, required: true },
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
     email: { type: String, required: true },
     username: { type: String, required: true },
     password: { type: String, required: true }
@@ -16,8 +16,8 @@ const userSchema = mongoose.Schema({
 userSchema.methods.serialize = function () {
     return {
         id: this._id,
-        firstname: this.firstname,
-        lastname: this.lastname,
+        firstName: this.firstName,
+        lastName: this.lastName,
         email: this.email,
         username: this.username,
     };
@@ -34,8 +34,8 @@ userSchema.statics.hashPassword = function (password) {
 
 //Validates new user data against joi schema
 const UserJoiSchema = Joi.object().keys({
-    firstname: Joi.string().min(1).trim().required(),
-    lastname: Joi.string().min(1).trim().required(),
+    firstName: Joi.string().min(1).trim().required(),
+    lastName: Joi.string().min(1).trim().required(),
     username: Joi.string().alphanum().min(4).max(30).trim().required(),
     password: Joi.string().min(6).max(30).trim().required(),
     email: Joi.string().email().trim().required()

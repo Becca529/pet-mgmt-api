@@ -4,6 +4,7 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const passport = require('passport');
+//const cors = require('cors');
 mongoose.Promise = global.Promise;
 
 const { DATABASE_URL, TEST_DATABASE_URL, PORT } = require('./config');
@@ -14,6 +15,17 @@ const { localStrategy, jwtStrategy } = require('./auth/auth.strategy');
 const app = express();
 let server;
 
+
+// CORS
+app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE');
+    if (req.method === 'OPTIONS') {
+      return res.send(204);
+    }
+    next();
+  });
 //Configure passport to use local/jsonweb token strategies for authetentation 
 passport.use(localStrategy);
 passport.use(jwtStrategy);
@@ -22,9 +34,11 @@ passport.use(jwtStrategy);
 app.use(morgan("common"));
 app.use(express.json());
 app.use(express.static('./public'));
+//app.use(cors);
+
 
 //Routers
-app.use('/api/user', userRouter); // Redirects all calls to /api/user to userRouter.
+app.use('/api/users', userRouter); // Redirects all calls to /api/user to userRouter.
 app.use('/api/auth', authRouter); // Redirects all calls to /user to userRouter.
 
 //For unhandled HTTP requests - return 404 not found error

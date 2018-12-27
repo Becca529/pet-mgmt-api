@@ -12,8 +12,8 @@ const userRouter = express.Router();
 //Creates new user
 userRouter.post('/', (req, res) => {
     const newUser = {
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
         email: req.body.email,
         username: req.body.username,
         password: req.body.password
@@ -23,7 +23,7 @@ userRouter.post('/', (req, res) => {
     const validation = Joi.validate(newUser, UserJoiSchema);
     if (validation.error) {
         console.log("joi validation errors");
-        return response.status(400).json({ error: validation.error });
+        return res.status(400).json({ error: validation.error });
     }
 
 
