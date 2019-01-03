@@ -30,7 +30,7 @@ userRouter.post('/', (req, res) => {
     //Validate that there is not an existing account with either the provided email or username in MongoDB Step 
     User.findOne({
         $or: [
-            { email: newUser.email },
+            // { email: newUser.email },
             { username: newUser.username }
         ]
     }).then(user => {
