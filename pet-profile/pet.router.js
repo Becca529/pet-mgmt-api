@@ -17,20 +17,20 @@ passport.use(jwtStrategy);
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
 
-// Retrieve user pet profiles
-petRouter.get('/', jsonParser, jwtAuth, (req, res) => {
-  console.log(req.user);
-  Pet.find({ user: req.user.id })
-    .populate('user')
-    .then(ideas => {
-      return res.status(200).json(
-        ideas.map(idea => idea.serialize())
-      );
-    })
-    .catch(err => {
-      return res.status(500).json(err);
-    });
-});
+// // Get user pet profiles
+// petRouter.get('/', jsonParser, jwtAuth, (req, res) => {
+//   console.log(req.user);
+//   Pet.find({ user: req.user.id })
+//     .populate('user')
+//     .then(pet => {
+//       return res.status(200).json(
+//         pets.map(idea => pet.serialize())
+//       );
+//     })
+//     .catch(err => {
+//       return res.status(500).json(err);
+//     });
+// });
 
 
 //Create a new pet profile
@@ -64,6 +64,7 @@ petRouter.post('/', jsonParser, jwtAuth, (req, res) => {
       return res.status(201).json(createdPet.serialize());
     })
     .catch(err => {
+      console.log(err);
       return res.status(500).json(err);
     });
 });
@@ -105,13 +106,17 @@ petRouter.put('/:petid', jwtAuth, (req, res) => {
 });
 
 // Retrieve user pet profiles
-petRouter.get('/', jsonParser, (req, res) => {
-  Pet.find({ user: req.user.id })
-    .populate('user')
+petRouter.get('/',jsonParser, jwtAuth, (req, res) => {
+  Pet.find()
+    .exec()
+    // .populate('user')
     .then(pets => {
+      // return res.status(200).json(
+      //   pets.map(pet => pet.serialize())
+      // );
       return res.status(200).json(
-        pets.map(pet => pet.serialize())
-      );
+           pets.map(pet => pet.serialize())
+         );;
     })
     .catch(err => {
       return res.status(500).json(err);

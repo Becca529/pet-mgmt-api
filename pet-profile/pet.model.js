@@ -63,8 +63,7 @@ const petSchema = mongoose.Schema({
   dislikes: 'string',
   physicalDescription: 'string',
   weight: { type: Number },
-  createDate: { type: Date, default: Date.now },
-
+  // createDate: { type: Date, default: Date.now },
   vetData: [vetSchema],
   medicineData: [medicineSchema],
   vaccineData: [vaccineSchema],
@@ -92,9 +91,11 @@ petSchema.methods.serialize = function () {
     sex: this.sex,
     physicalDescription: this.physicalDescription,
     likes: this.likes,
+    personality: this.personality,
     dislikes: this.dislikes,
     weight: this.weight,
-    createDate: this.createDate.toLocaleDateString()
+    createDate: this._id.getTimestamp().toLocaleDateString()
+    // createDate: this.createDate.toLocaleDateString()
   };
 };
 
@@ -105,8 +106,13 @@ const petJoiSchema = Joi.object().keys({
   petName: Joi.string().min(1).trim().required(),
   breed: Joi.string().optional(),
   sex: Joi.string().optional(),
-  physicalDescription: Joi.string().min(1).max(500).trim().allow(''),
-  createDate: Joi.date().optional()
+  birthdate: Joi.date().optional(),  
+  personality: Joi.string().optional(),
+  type: Joi.string().optional(),
+  likes: Joi.string().optional(),
+  dislikes: Joi.string().optional(),
+  weight: Joi.number().optional(),
+  physicalDescription: Joi.string().min(1).max(500).trim().allow('').optional(),
 });
 
 const Pet = mongoose.model('pet', petSchema);
