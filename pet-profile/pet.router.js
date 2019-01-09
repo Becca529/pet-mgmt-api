@@ -158,7 +158,7 @@ petRouter.post('/:petId', jsonParser, (req, res) => {
     return res.status(400).end
   }
 
-  if (req.body.type === 'vaccine') {
+  if (req.body.type == 'vaccine') {
     Pet.findById(req.params.petId)
       .then(pet => {
         pet.vaccineData.push({ 
@@ -177,8 +177,9 @@ petRouter.post('/:petId', jsonParser, (req, res) => {
         console.log(err)
         return res.status(500).json(err);
   })
+}
 
-  if(req.body.type === 'pet-sitting-food') {
+  if(req.body.type == 'pet-sitting-food') {
     Pet.findById(req.params.petId)
       .then(pet => {
         pet.petSittingData.push({ 
@@ -198,7 +199,7 @@ petRouter.post('/:petId', jsonParser, (req, res) => {
   })
   }
 
-  if(req.body.type === 'vet') {
+  if(req.body.type == 'vet') {
     Pet.findById(req.params.petId)
       .then(pet => {
         pet.vetData.push({ 
@@ -224,7 +225,6 @@ petRouter.post('/:petId', jsonParser, (req, res) => {
         console.log(err)
         return res.status(500).json(err);
   })
-  }
 }
   else  {
     console.log('incorrect subdocument type');
@@ -338,7 +338,7 @@ petRouter.delete('details/${subdDocId}', jsonParser, (req, res) => {
       console.log('incorrect subdocument type');
       return res.status(400).end
     }
-    });
+  });
   
   //***** MEDICIAL ********
 //get all medical-vaccinces by pet id
