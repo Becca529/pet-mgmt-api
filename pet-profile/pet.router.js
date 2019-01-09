@@ -40,7 +40,6 @@ petRouter.post('/', jsonParser, jwtAuth, (req, res) => {
   const newPet = {
     user: req.user.id,
     petName: req.body.petName,
-    //photo
     type: req.body.type,
     breed: req.body.breed,
     sex: req.body.sex,
@@ -73,9 +72,8 @@ petRouter.post('/', jsonParser, jwtAuth, (req, res) => {
 petRouter.put('/:petid', jwtAuth, (req, res) => {
   const updatedPet = {
     user: req.user.id,
+    petid: req.body.id,
     petName: req.body.petName,
-    //photo,
-    //add id
     breed: req.body.breed,
     sex: req.body.sex,
     birthdate: req.body.birthdate,
@@ -124,19 +122,7 @@ petRouter.get('/',jsonParser, jwtAuth, (req, res) => {
     });
 });
 
-// Retrieve all pets
-petRouter.get('/all', (req, res) => {
-  Pet.find()
-    .populate('user')
-    .then(pets => {
-      return res.status(200).json(
-        pets.map(pet => pet.serialize())
-      );
-    })
-    .catch(err => {
-      return res.status(500).json(err);
-    });
-});
+
 
 // Retrieve one pet profile by id
 petRouter.get('/:petID', jsonParser, (req, res) => {
@@ -163,15 +149,17 @@ petRouter.delete('/:petid', jsonParser, (req, res) => {
 });
 
 
-///SUBDOCUMENTS
-petRouter.post('/:petID', jsonParser, (req, res) => {
+///PET PROFILE SUBDOCUMENTS - VET, PETTING-SITTING-FOOD, VACCINE
+
+//ADD NEW
+petRouter.post('/:petId', jsonParser, (req, res) => {
   if (!req.body.type) {
     console.log('missing correct subdocument type');
     return res.status(400).end
   }
 
   if (req.body.type === 'vaccine') {
-    Pet.findById(req.params.petID)
+    Pet.findById(req.params.petId)
       .then(pet => {
         pet.vaccineData.push({ 
           vaccineName: req.body.vaccineName,
@@ -189,6 +177,54 @@ petRouter.post('/:petID', jsonParser, (req, res) => {
         console.log(err)
         return res.status(500).json(err);
   })
+
+  if(req.body.type === 'pet-sitting-food') {
+    Pet.findById(req.params.petId)
+      .then(pet => {
+        pet.petSittingData.push({ 
+          foodType: req.body.foodType,
+          quantity: req.body.quantity,
+          frequency: req.body.frequency,
+        })
+      pet.save()
+      })
+      .then(() => {
+        console.log('pet-sitting food added');
+        return res.status(201).end();
+      })
+      .catch(err => {
+        console.log(err)
+        return res.status(500).json(err);
+  })
+  }
+
+  if(req.body.type === 'vet') {
+    Pet.findById(req.params.petId)
+      .then(pet => {
+        pet.vetData.push({ 
+          clinicName: req.body.clinicName,
+          addressLine1: req.body.addressLine1,
+          addressLine2: req.body.addressLine2,
+          city: req.body.city,
+          zipCode: req.body.zipCode,
+          city: req.body.city,
+          state: req.body.state,
+          phoneNumber: req.body.phoneNumber,
+          faxNumber: req.body.faxNumber,
+          email: req.body.email,
+          doctor: req.body.doctor,
+        })
+      pet.save()
+      })
+      .then(() => {
+        console.log('vet info added');
+        return res.status(201).end();
+      })
+      .catch(err => {
+        console.log(err)
+        return res.status(500).json(err);
+  })
+  }
 }
   else  {
     console.log('incorrect subdocument type');
@@ -196,8 +232,113 @@ petRouter.post('/:petID', jsonParser, (req, res) => {
   }
   });
   
+//DELETE
+petRouter.delete('details/${subdDocId}', jsonParser, (req, res) => {
+  if (!req.body.type) {
+    console.log('missing correct subdocument type');
+    return res.status(400).end
+  }
+});
+  // if(req.body.type === 'vet') {
+  //   Pet.find({ "vetData._id": req.query.subDocId})
+  //     .then (item => {
+  //       $pull.item
+  //     }
 
+
+  //     .then(pet => {
+  //     $pull: { subPages: { _id: req.body.ID } }
+  // }
+
+
+  // if (!req.body.type) {
+  //   console.log('missing correct subdocument type');
+  //   return res.status(400).end
+  // }
+  // else {
+
+  // }
+
+  //UPDATE
+  petRouter.put('/:petId', jsonParser, (req, res) => {
+    if (!req.body.type) {
+      console.log('missing correct subdocument type');
+      return res.status(400).end
+    }
   
+    if (req.body.type === 'vaccine') {
+      Pet.findById(req.params.petId)
+        .then(pet => {
+          pet.vaccineData.push({ 
+            vaccineName: req.body.vaccineName,
+            dateAdministered: req.body.dateAdministered,
+            notes: req.body.notes,
+            nextDueDate: req.body.nextDueDate
+          })
+        pet.save()
+        })
+        .then(() => {
+          console.log('vaccine-added');
+          return res.status(201).end();
+        })
+        .catch(err => {
+          console.log(err)
+          return res.status(500).json(err);
+    })
+  
+    if(req.body.type === 'pet-sitting-food') {
+      Pet.findById(req.params.petId)
+        .then(pet => {
+          pet.petSittingData.push({ 
+            foodType: req.body.foodType,
+            quantity: req.body.quantity,
+            frequency: req.body.frequency,
+          })
+        pet.save()
+        })
+        .then(() => {
+          console.log('pet-sitting food added');
+          return res.status(201).end();
+        })
+        .catch(err => {
+          console.log(err)
+          return res.status(500).json(err);
+    })
+    }
+  
+    if(req.body.type === 'vet') {
+      Pet.findById(req.params.petId)
+        .then(pet => {
+          pet.vetData.push({ 
+            clinicName: req.body.clinicName,
+            addressLine1: req.body.addressLine1,
+            addressLine2: req.body.addressLine2,
+            city: req.body.city,
+            zipCode: req.body.zipCode,
+            city: req.body.city,
+            state: req.body.state,
+            phoneNumber: req.body.phoneNumber,
+            faxNumber: req.body.faxNumber,
+            email: req.body.email,
+            doctor: req.body.doctor,
+          })
+        pet.save()
+        })
+        .then(() => {
+          console.log('vet info added');
+          return res.status(201).end();
+        })
+        .catch(err => {
+          console.log(err)
+          return res.status(500).json(err);
+    })
+    }
+  }
+    else  {
+      console.log('incorrect subdocument type');
+      return res.status(400).end
+    }
+    });
   
   //***** MEDICIAL ********
 //get all medical-vaccinces by pet id
