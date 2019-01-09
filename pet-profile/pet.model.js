@@ -15,7 +15,7 @@ const vetSchema = mongoose.Schema({
 })
 
 const medicineSchema = mongoose.Schema({
-  medicinenName: 'string',
+  medicineName: 'string',
   description: 'string',
   directions: 'string',
   rxNumber: 'string',
@@ -23,11 +23,10 @@ const medicineSchema = mongoose.Schema({
 })
 
 const vaccineSchema = mongoose.Schema({
-  vaccinenName: 'string',
+  vaccineName: 'string',
   dateAdministered: { type: Date},
   notes: 'string',
   nextDueDate: { type: Date},
-  currentStatus: 'string'
 })
 
 const notesSchema = mongoose.Schema({
@@ -83,7 +82,6 @@ petSchema.methods.serialize = function () {
   return {
     id: this._id,
     user: user,
-    //image
     petName: this.petName,
     type: this.type,
     breed: this.breed,
@@ -94,7 +92,9 @@ petSchema.methods.serialize = function () {
     personality: this.personality,
     dislikes: this.dislikes,
     weight: this.weight,
-    createDate: this._id.getTimestamp().toLocaleDateString()
+    createDate: this._id.getTimestamp().toLocaleDateString(),
+    vetData: this.vetSchema
+
     // createDate: this.createDate.toLocaleDateString()
   };
 };

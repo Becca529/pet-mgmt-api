@@ -74,7 +74,8 @@ petRouter.put('/:petid', jwtAuth, (req, res) => {
   const updatedPet = {
     user: req.user.id,
     petName: req.body.petName,
-    //photo
+    //photo,
+    //add id
     breed: req.body.breed,
     sex: req.body.sex,
     birthdate: req.body.birthdate,
@@ -87,7 +88,7 @@ petRouter.put('/:petid', jwtAuth, (req, res) => {
   console.log(updatedPet);
   console.log(req.params.petid);
   // Checks that all provided data passes all schema requirements
-  const validation = Joi.validate(updatedPet, ideaJoiSchema);
+  const validation = Joi.validate(updatedPet, petJoiSchema);
   if (validation.error) {
     console.log("validation");
     return res.status(400).json({ error: validation.error });
@@ -161,10 +162,44 @@ petRouter.delete('/:petid', jsonParser, (req, res) => {
     });
 });
 
-// Question since they are all subdocuments of the pet model -
-// can I somehow reuse the post, edit and delete with if or case statements?
 
-//***** MEDICIAL ********
+///SUBDOCUMENTS
+petRouter.post('/:petID', jsonParser, (req, res) => {
+  if (!req.body.type) {
+    console.log('missing correct subdocument type');
+    return res.status(400).end
+  }
+
+  if (req.body.type === 'vaccine') {
+    Pet.findById(req.params.petID)
+      .then(pet => {
+        pet.vaccineData.push({ 
+          vaccineName: req.body.vaccineName,
+          dateAdministered: req.body.dateAdministered,
+          notes: req.body.notes,
+          nextDueDate: req.body.nextDueDate
+        })
+      pet.save()
+      })
+      .then(() => {
+        console.log('vaccine-added');
+        return res.status(201).end();
+      })
+      .catch(err => {
+        console.log(err)
+        return res.status(500).json(err);
+  })
+}
+  else  {
+    console.log('incorrect subdocument type');
+    return res.status(400).end
+  }
+  });
+  
+
+  
+  
+  //***** MEDICIAL ********
 //get all medical-vaccinces by pet id
 //get all medical-medicine by pet id
 //post new medical-vaccinces
