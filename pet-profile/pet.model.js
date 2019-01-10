@@ -93,9 +93,9 @@ petSchema.methods.serialize = function () {
     dislikes: this.dislikes,
     weight: this.weight,
     createDate: this._id.getTimestamp().toLocaleDateString(),
-    vetData: this.vetSchema
-
-    // createDate: this.createDate.toLocaleDateString()
+    vetData: this.vetData,
+    vaccineData: this.vaccineData,
+    petSittingData: this.petSittingData
   };
 };
 
