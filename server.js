@@ -11,6 +11,9 @@ const { DATABASE_URL, TEST_DATABASE_URL, PORT } = require('./config');
 const { userRouter } = require('./user/user.router');
 const { authRouter } = require('./auth/auth.router');
 const { petRouter } = require('./pet-profile/pet.router');
+
+const {petsRouter, sittersRouter, vaccinesRouter, veterinariansRouter} = require('./routes');
+
 const { localStrategy, jwtStrategy } = require('./auth/auth.strategy');
 
 const app = express();
@@ -28,7 +31,7 @@ app.use(function (req, res, next) {
     next();
   });
 
-//Configure passport to use local/jsonweb token strategies for authetentation 
+//Configure passport to use local/jsonweb token strategies for authetentation
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
