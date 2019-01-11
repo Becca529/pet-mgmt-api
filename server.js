@@ -46,6 +46,7 @@ app.use(express.static('./public'));
 app.use('/api/users', userRouter); // Redirects all calls to /api/user to userRouter.
 app.use('/api/auth', authRouter); // Redirects all calls to /users to userRouter.
 app.use('/api/pets', petsRouter); // Redirects all calls to /pts to petRouter.
+
 // app.use('/api/vaccines', vaccinesRouter);
 // app.use('api/veterinarians', veterinariansRouter);
 // app.use('api/sitters', sittersRouter);
