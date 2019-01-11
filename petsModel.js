@@ -48,7 +48,7 @@ const petSittingSchema = mongoose.Schema({
 
 
 
-//Create mongoose pet schema 
+//Create mongoose pet schema
 const petSchema = mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
   petName: { type: String, required: true },
@@ -102,11 +102,12 @@ petSchema.methods.serialize = function () {
 
 // Validate provided data when creating a new pet profile
 const petJoiSchema = Joi.object().keys({
+  petid: Joi.string().optional(),
   user: Joi.string().optional(),
   petName: Joi.string().min(1).trim().required(),
   breed: Joi.string().optional(),
   sex: Joi.string().optional(),
-  birthdate: Joi.date().optional(),  
+  birthdate: Joi.date().optional(),
   personality: Joi.string().optional(),
   type: Joi.string().optional(),
   likes: Joi.string().optional(),
