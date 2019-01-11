@@ -1,6 +1,6 @@
-const {router: petsRouter} = require('./petsRouter');
-const {router: sittersRouter} = require('./sittersRouter');
-const {router: vaccinesRouter} = require('./vaccinesRouter');
-const {router: veterinariansRouter} = require('./veterinariansRouter');
+const {petsRouter} = require('./petsRouter');
+const {sittersRouter} = require('./sittersRouter');
+const {vaccinesRouter} = require('./vaccinesRouter');
+const {veterinariansRouter} = require('./veterinariansRouter');
 
 module.exports = {petsRouter, sittersRouter, vaccinesRouter, veterinariansRouter};
