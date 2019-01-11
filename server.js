@@ -4,7 +4,8 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const passport = require('passport');
-//const cors = require('cors');
+const cors = require('cors');
+const {CLIENT_ORIGIN} = require('./config');
 mongoose.Promise = global.Promise;
 
 const { DATABASE_URL, TEST_DATABASE_URL, PORT } = require('./config');
@@ -19,15 +20,21 @@ let server;
 
 
 // CORS
-app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
-    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE');
-    if (req.method === 'OPTIONS') {
-      return res.send(204);
-    }
-    next();
-  });
+// app.use(function (req, res, next) {
+//     res.header('Access-Control-Allow-Origin', '*');
+//     res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+//     res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE');
+//     if (req.method === 'OPTIONS') {
+//       return res.send(204);
+//     }
+//     next();
+//   });
+
+  app.use(
+    cors({
+        origin: CLIENT_ORIGIN
+    })
+);
 
 //Configure passport to use local/jsonweb token strategies for authetentation
 passport.use(localStrategy);
@@ -45,13 +52,16 @@ app.use('/api/users', userRouter); // Redirects all calls to /api/user to userRo
 app.use('/api/auth', authRouter); // Redirects all calls to /users to userRouter.
 app.use('/api/pets', petsRouter); // Redirects all calls to /pts to petRouter.
 app.use('/api/vaccines', vaccinesRouter);
-app.use('api/veterinarians', veterinariansRouter);
-app.use('api/sitters', sittersRouter);
+app.use('/api/veterinarians', veterinariansRouter);
+app.use('/api/sitters', sittersRouter);
 
 //For unhandled HTTP requests - return 404 not found error
 app.use('*', function (req, res) {
     res.status(404).json({ error: 'Not Found.' });
 });
+
+
+//add protected endpoints?
 
 //Connect to MongoDB database and start expressJS server
 function startServer(dataBaseUrl, port = PORT) {

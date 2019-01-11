@@ -18,9 +18,9 @@ const jwtAuth = passport.authenticate('jwt', { session: false });
 
 
 // -----------------------------------------------------------------------------
-//                                    DELETE
+//                                    POST
 // -----------------------------------------------------------------------------
-veterinariansRouter.post('/:petId/vaccine', jsonParser, jwtAuth, (req, res) => {
+veterinariansRouter.post('/:petId', jsonParser, jwtAuth, (req, res) => {
     Pet.findById(req.params.petId)
     .then(pet => {
       pet.vetData.push({ 
@@ -51,42 +51,43 @@ veterinariansRouter.post('/:petId/vaccine', jsonParser, jwtAuth, (req, res) => {
 // -----------------------------------------------------------------------------
 //                                    DELETE
 // -----------------------------------------------------------------------------
-veterinariansRouter.delete('/:petId/vaccine/:subDocId', jwtAuth, (req, res) => {
-    let subDocId = req.params.subDocId;
-    let petId = req.params.petId;
-    console.log("getting to delete");
-    Pet.findById(petId)
-        // .then(pet => {
-        //   if (pet.user._id !== req.user._id) {
-        //     //throw errorr - catch error here
-        //   }
+veterinariansRouter.delete('/:petId/:subDocId', jwtAuth, (req, res) => {
+  console.log("getting to delete");
+  Pet.findById(petId)
+    //  .then(pet => {
+    //    if (pet.user._id !== req.user._id) {
     .then(pet => {
-        return Pet.findByIdAndUpdate(pet._id, {
-            '$pull' : {'vetData': {'_id': new ObjectId(subDocId)}}
-          })
-        })
+      return Pet.findByIdAndUpdate(pet._id, {
+        '$pull' : {'vetData': {'_id': new ObjectId(subDocId)}}
+      })
+    })
+    .then(() => {
+      return res.status(204).end();
+    })
+    .catch(err => {
+      return res.status(500).json(err);
+    });
 });
 
 // -----------------------------------------------------------------------------
 //                                    PUT
 // -----------------------------------------------------------------------------
-veterinariansRouter.put('/:petId/vaccine/:subDocId', jwtAuth, (req, res) => {
+veterinariansRouter.put('/:petId/:subDocId', jwtAuth, (req, res) => {
     let subDocId = req.params.subDocId;
     let petId = req.params.petId;
     console.log("getting to delete");
     Pet.findById(petId)
-        // .then(pet => {
-        //   if (pet.user._id !== req.user._id) {
-        //     //throw errorr - catch error here
-        //   }
-    .then(pet => {
-        return Pet.findByIdAndUpdate(pet._id, {
-            '$set' : {'vetData': {'_id': new ObjectId(subDocId)}}
+      .then(pet => {
+          return Pet.findByIdAndUpdate(pet._id, {
+              '$set' : {'vetData': {'_id': new ObjectId(subDocId)}}
           })
-        })
-});
-
-
-
+      })
+      .then((pet) => {
+          return res.status(204).end();
+      })
+      .catch(err => {
+          return res.status(500).json(err);
+      });
+  });
 
 module.exports = { veterinariansRouter };

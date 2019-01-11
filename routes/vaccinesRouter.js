@@ -43,7 +43,7 @@ vaccinesRouter.post('/:petId/vaccine', jsonParser, jwtAuth, (req, res) => {
 // -----------------------------------------------------------------------------
 //                                    DELETE
 // -----------------------------------------------------------------------------
-vaccinesRouter.delete('/:petId/vaccine/:subDocId', jwtAuth, (req, res) => {
+vaccinesRouter.delete('/:petId/:subDocId', jwtAuth, (req, res) => {
     let subDocId = req.params.subDocId;
     let petId = req.params.petId;
     console.log("getting to delete");
@@ -62,7 +62,7 @@ vaccinesRouter.delete('/:petId/vaccine/:subDocId', jwtAuth, (req, res) => {
 // -----------------------------------------------------------------------------
 //                                    PUT
 // -----------------------------------------------------------------------------
-vaccinesRouter.put('/:petId/vaccine/:subDocId', jwtAuth, (req, res) => {
+vaccinesRouter.put('/:petId/:subDocId', jwtAuth, (req, res) => {
     let subDocId = req.params.subDocId;
     let petId = req.params.petId;
     console.log("getting to delete");
