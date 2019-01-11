@@ -9,13 +9,16 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const ObjectId = require('mongodb').ObjectId;
 mongoose.Promise = global.Promise;
-const { Pet, petJoiSchema } = require('../pet-profile/pet.model');
+const { Pet, petJoiSchema } = require('../models/petsModel.js');
 const { jwtStrategy } = require('../auth/auth.strategy');
 
 passport.use(jwtStrategy);
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
 
+// -----------------------------------------------------------------------------
+//                                    POST
+// -----------------------------------------------------------------------------
 vaccinesRouter.post('/:petId/vaccine', jsonParser, jwtAuth, (req, res) => {
     Pet.findById(req.params.petId)
         .then(pet => {
@@ -37,7 +40,9 @@ vaccinesRouter.post('/:petId/vaccine', jsonParser, jwtAuth, (req, res) => {
 })
 });
 
-
+// -----------------------------------------------------------------------------
+//                                    DELETE
+// -----------------------------------------------------------------------------
 vaccinesRouter.delete('/:petId/vaccine/:subDocId', jwtAuth, (req, res) => {
     let subDocId = req.params.subDocId;
     let petId = req.params.petId;
@@ -54,6 +59,9 @@ vaccinesRouter.delete('/:petId/vaccine/:subDocId', jwtAuth, (req, res) => {
         })
 });
 
+// -----------------------------------------------------------------------------
+//                                    PUT
+// -----------------------------------------------------------------------------
 vaccinesRouter.put('/:petId/vaccine/:subDocId', jwtAuth, (req, res) => {
     let subDocId = req.params.subDocId;
     let petId = req.params.petId;

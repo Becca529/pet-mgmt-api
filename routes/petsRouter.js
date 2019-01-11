@@ -9,7 +9,7 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const ObjectId = require('mongodb').ObjectId;
 mongoose.Promise = global.Promise;
-const { Pet, petJoiSchema } = require('../petsModel.js');
+const { Pet, petJoiSchema } = require('../models/petsModel.js');
 const { jwtStrategy } = require('../auth/auth.strategy');
 
 passport.use(jwtStrategy);
@@ -35,14 +35,9 @@ petsRouter.delete('/:petid', jsonParser, jwtAuth, (req, res) => {
 //                                    GET ALL
 // -----------------------------------------------------------------------------
 petsRouter.get('/',jsonParser, jwtAuth, (req, res) => {
-  Pet.find()
-  //need to get ride of exec - exec gets all note ...req.user.serialize
-    .exec()
-    // .populate('user')
+  Pet.find({ user: req.user.id })
+    .populate('user')
     .then(pets => {
-      // return res.status(200).json(
-      //   pets.map(pet => pet.serialize())
-      // );
       return res.status(200).json(
            pets.map(pet => pet.serialize())
          );;
@@ -75,7 +70,6 @@ petsRouter.get('/:petID', jsonParser, jwtAuth, (req, res) => {
 // -----------------------------------------------------------------------------
 petsRouter.post('/', jsonParser, jwtAuth, (req, res) => {
   console.log(req.user);
-  // console.log("gettting to post router");
   const newPet = {
     user: req.user.id,
     petName: req.body.petName,

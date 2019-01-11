@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 
 const jsonParser = bodyParser.json();
 
-const { User, UserJoiSchema } = require('./user.model.js');
+const { User, UserJoiSchema } = require('../models/usersModel.js');
 
 const userRouter = express.Router();
 
