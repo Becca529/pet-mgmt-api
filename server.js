@@ -47,6 +47,9 @@ app.use('/api/users', userRouter); // Redirects all calls to /api/user to userRo
 app.use('/api/auth', authRouter); // Redirects all calls to /users to userRouter.
 app.use('/api/pets', petsRouter); // Redirects all calls to /pts to petRouter.
 
+// app.use('/api/vaccines', vaccinesRouter);
+// app.use('api/veterinarians', veterinariansRouter);
+// app.use('api/sitters', sittersRouter);
 
 //For unhandled HTTP requests - return 404 not found error
 app.use('*', function (req, res) {
