@@ -102,19 +102,21 @@ petSchema.methods.serialize = function () {
 
 // Validate provided data when creating a new pet profile
 const petJoiSchema = Joi.object().keys({
-  petid: Joi.string().optional(),
   user: Joi.string().optional(),
   petName: Joi.string().min(1).trim().required(),
-  breed: Joi.string().optional(),
-  sex: Joi.string().optional(),
-  birthdate: Joi.date().optional(),
-  personality: Joi.string().optional(),
-  type: Joi.string().optional(),
-  likes: Joi.string().optional(),
-  dislikes: Joi.string().optional(),
-  weight: Joi.number().optional(),
-  physicalDescription: Joi.string().min(1).max(500).trim().allow('').optional(),
+  breed: Joi.string().allow('', null),
+  sex: Joi.string().allow('', null),
+  birthdate: Joi.string().allow('', null),
+  personality: Joi.string().allow('', null),
+  type: Joi.string().allow('', null),
+  likes: Joi.string().allow('', null),
+  dislikes: Joi.string().allow('', null),
+  weight: Joi.number().allow('', null),
+  physicalDescription: Joi.string().min(1).max(500).trim().allow('', null)
 });
+
+
+
 
 const Pet = mongoose.model('pet', petSchema);
 module.exports = { Pet, petJoiSchema };

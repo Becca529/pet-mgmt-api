@@ -108,8 +108,8 @@ petsRouter.post('/', jsonParser, jwtAuth, (req, res) => {
 petsRouter.put('/:petid', jsonParser, jwtAuth, (req, res) => {
   const updatedPet = {
     user: req.user.id,
-    petid: req.body.id,
     petName: req.body.petName,
+    type: req.body.type,
     breed: req.body.breed,
     sex: req.body.sex,
     birthdate: req.body.birthdate,
@@ -132,7 +132,7 @@ petsRouter.put('/:petid', jsonParser, jwtAuth, (req, res) => {
   Pet.findByIdAndUpdate(req.params.petid, updatedPet)
     .then(() => {
       console.log("update");
-      return res.status(204).end();
+      return res.status(201).end();
     })
     .catch(err => {
       console.log("here");
