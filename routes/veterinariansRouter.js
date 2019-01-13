@@ -54,8 +54,6 @@ veterinariansRouter.post('/:petId', jsonParser, jwtAuth, (req, res) => {
 veterinariansRouter.delete('/:petId/:subDocId', jwtAuth, (req, res) => {
   console.log("getting to delete");
   Pet.findById(petId)
-    //  .then(pet => {
-    //    if (pet.user._id !== req.user._id) {
     .then(pet => {
       return Pet.findByIdAndUpdate(pet._id, {
         '$pull' : {'vetData': {'_id': new ObjectId(subDocId)}}
@@ -75,19 +73,45 @@ veterinariansRouter.delete('/:petId/:subDocId', jwtAuth, (req, res) => {
 veterinariansRouter.put('/:petId/:subDocId', jwtAuth, (req, res) => {
     let subDocId = req.params.subDocId;
     let petId = req.params.petId;
-    console.log("getting to delete");
-    Pet.findById(petId)
-      .then(pet => {
-          return Pet.findByIdAndUpdate(pet._id, {
-              '$set' : {'vetData': {'_id': new ObjectId(subDocId)}}
+    console.log("getting to update");
+    // Pet.findById(petId)
+    // .then(pet => {
+      Pet.updateOne(
+          {
+            '_id': petId,
+            'vetaData._id': subDocId
+          },
+          {
+            '$set': { 
+              'clinicName.$': req.body.clinicName
+            }
           })
-      })
-      .then((pet) => {
-          return res.status(204).end();
-      })
-      .catch(err => {
-          return res.status(500).json(err);
+          .then((pet) => {
+            return res.status(204).end();
+        })
+        .catch(err => {
+            return res.status(500).json(err);
+        });
       });
-  });
+   
+  
+ 
+
+
+    //prior try
+    // console.log("getting to update");
+    // Pet.findById(petId)
+    //   .then(pet => {
+    //       return Pet.findByIdAndUpdate(pet._id, {
+    //           '$set' : {'vetData': {'_id': new ObjectId(subDocId)}}
+    //       })
+    //   })
+    //   .then((pet) => {
+    //       return res.status(204).end();
+    //   })
+    //   .catch(err => {
+    //       return res.status(500).json(err);
+    //   });
+
 
 module.exports = { veterinariansRouter };

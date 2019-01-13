@@ -68,7 +68,8 @@ function startServer(dataBaseUrl, port = PORT) {
     return new Promise((resolve, reject) => {
         //Connect to database
        // mongoose.connect(dataBaseUrl, { useNewUrlParser: true }, err => {
-        mongoose.connect(dataBaseUrl, err => {
+    mongoose.set('debug', true);
+       mongoose.connect(dataBaseUrl, err => {
             if (err) {
                 //If error connecting to database - print out error to console and reject promise
                 console.error(err);
