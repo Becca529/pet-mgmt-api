@@ -21,7 +21,8 @@ const jwtAuth = passport.authenticate('jwt', { session: false });
 //                                    POST
 // -----------------------------------------------------------------------------
 veterinariansRouter.post('/:petId', jsonParser, jwtAuth, (req, res) => {
-    Pet.findById(req.params.petId)
+ console.log("getting to post vet");
+  Pet.findById(req.params.petId)
     .then(pet => {
       pet.vetData.push({ 
         clinicName: req.body.clinicName,
@@ -53,6 +54,8 @@ veterinariansRouter.post('/:petId', jsonParser, jwtAuth, (req, res) => {
 // -----------------------------------------------------------------------------
 veterinariansRouter.delete('/:petId/:subDocId', jwtAuth, (req, res) => {
   console.log("getting to delete");
+  let petId = req.params.petId;
+  let subDocId = req.params.subDocId;
   Pet.findById(petId)
     .then(pet => {
       return Pet.findByIdAndUpdate(pet._id, {
@@ -73,24 +76,32 @@ veterinariansRouter.delete('/:petId/:subDocId', jwtAuth, (req, res) => {
 veterinariansRouter.put('/:petId/:subDocId', jwtAuth, (req, res) => {
     let subDocId = req.params.subDocId;
     let petId = req.params.petId;
-    console.log("getting to update");
+    console.log("getting to put router");
     // Pet.findById(petId)
     // .then(pet => {
+
+      // return Pet.findByIdAndUpdate(pet._id, {
+      //   '$pull' : {'vetData': {'_id': new ObjectId(subDocId)}}
+      // })
+
       Pet.updateOne(
           {
             '_id': petId,
-            'vetaData._id': subDocId
+            // 'vetData.$._id': subDocId
+            'vetData': {'_id': new ObjectId(subDocId)}
           },
           {
             '$set': { 
-              'clinicName.$': req.body.clinicName
+              'vetData.$.clinicName': req.body.clinicName
             }
           })
+          // Pet.save()
           .then((pet) => {
             return res.status(204).end();
         })
         .catch(err => {
             return res.status(500).json(err);
+
         });
       });
    

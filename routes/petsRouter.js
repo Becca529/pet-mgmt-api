@@ -21,6 +21,7 @@ const jwtAuth = passport.authenticate('jwt', { session: false });
 //                                    DELETE
 // -----------------------------------------------------------------------------
 petsRouter.delete('/:petid', jsonParser, jwtAuth, (req, res) => {
+  console.log("getting to delete router");
   Pet.findByIdAndDelete(req.params.petid)
     .then(() => {
       return res.status(204).end();
@@ -52,8 +53,8 @@ petsRouter.get('/',jsonParser, jwtAuth, (req, res) => {
 //                                  GET SINGLE
 // -----------------------------------------------------------------------------
 // Retrieve one pet profile by id
-petsRouter.get('/:petID', jsonParser, jwtAuth, (req, res) => {
-  Pet.findById(req.params.petID)
+petsRouter.get('/:petId', jsonParser, jwtAuth, (req, res) => {
+  Pet.findById(req.params.petid)
     .populate('user')
     .then(pet => {
       return res.status(200).json(pet.serialize());
