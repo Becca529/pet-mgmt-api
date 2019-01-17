@@ -9,7 +9,7 @@ const {CLIENT_ORIGIN} = require('./config');
 mongoose.Promise = global.Promise;
 
 const { DATABASE_URL, TEST_DATABASE_URL, PORT } = require('./config');
-const { userRouter } = require('./routes/usersRouter');
+const { usersRouter } = require('./routes/usersRouter');
 const { authRouter } = require('./auth/auth.router');
 const { petsRouter, sittersRouter, vaccinesRouter, veterinariansRouter} = require('./routes');
 
@@ -17,18 +17,6 @@ const { localStrategy, jwtStrategy } = require('./auth/auth.strategy');
 
 const app = express();
 let server;
-
-
-// CORS
-// app.use(function (req, res, next) {
-//     res.header('Access-Control-Allow-Origin', '*');
-//     res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
-//     res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE');
-//     if (req.method === 'OPTIONS') {
-//       return res.send(204);
-//     }
-//     next();
-//   });
 
   app.use(
     cors({
@@ -48,12 +36,12 @@ app.use(express.static('./public'));
 
 
 //Routers
-app.use('/api/users', userRouter); // Redirects all calls to /api/user to userRouter.
-app.use('/api/auth', authRouter); // Redirects all calls to /users to userRouter.
-app.use('/api/pets', petsRouter); // Redirects all calls to /pts to petRouter.
-app.use('/api/vaccines', vaccinesRouter);
-app.use('/api/veterinarians', veterinariansRouter);
-app.use('/api/sitters', sittersRouter);
+app.use('/api/users', usersRouter); // Redirects all calls to /user to userRouter.
+app.use('/api/auth', authRouter); // Redirects all calls to /auth to authRouter.
+app.use('/api/pets', petsRouter); // Redirects all calls to /pets to petsRouter.
+app.use('/api/vaccines', vaccinesRouter); // Redirects all calls to /vaccines to vaccinesRouter.
+app.use('/api/veterinarians', veterinariansRouter); // Redirects all calls to /veterinarians to veterinariansRouter.
+app.use('/api/sitters', sittersRouter); // Redirects all calls to /sittiers to sittersRouter.
 
 //For unhandled HTTP requests - return 404 not found error
 app.use('*', function (req, res) {
@@ -61,13 +49,10 @@ app.use('*', function (req, res) {
 });
 
 
-//add protected endpoints?
-
 //Connect to MongoDB database and start expressJS server
 function startServer(dataBaseUrl, port = PORT) {
     return new Promise((resolve, reject) => {
         //Connect to database
-       // mongoose.connect(dataBaseUrl, { useNewUrlParser: true }, err => {
     mongoose.set('debug', true);
        mongoose.connect(dataBaseUrl, err => {
             if (err) {

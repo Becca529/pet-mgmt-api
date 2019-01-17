@@ -1,26 +1,22 @@
 const express = require("express");
-const Joi = require('joi');
+const Joi = require("joi");
 const petsRouter = express.Router();
-
-const bodyParser = require('body-parser');
-
+const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
-const passport = require('passport');
-const mongoose = require('mongoose');
-const ObjectId = require('mongodb').ObjectId;
+const passport = require("passport");
+const mongoose = require("mongoose");
+const ObjectId = require("mongodb").ObjectId;
 mongoose.Promise = global.Promise;
-const { Pet, petJoiSchema } = require('../models/petsModel.js');
-const { jwtStrategy } = require('../auth/auth.strategy');
+const { Pet, petJoiSchema } = require("../models/petsModel.js");
 
+const { jwtStrategy } = require("../auth/auth.strategy");
 passport.use(jwtStrategy);
-const jwtAuth = passport.authenticate('jwt', { session: false });
-
-
+const jwtAuth = passport.authenticate("jwt", { session: false });
 
 // -----------------------------------------------------------------------------
 //                                    DELETE
 // -----------------------------------------------------------------------------
-petsRouter.delete('/:petid', jsonParser, jwtAuth, (req, res) => {
+petsRouter.delete("/:petid", jsonParser, jwtAuth, (req, res) => {
   console.log("getting to delete router");
   Pet.findByIdAndDelete(req.params.petid)
     .then(() => {
@@ -31,45 +27,39 @@ petsRouter.delete('/:petid', jsonParser, jwtAuth, (req, res) => {
     });
 });
 
-
 // -----------------------------------------------------------------------------
-//                                    GET ALL
+//                                    GET 
 // -----------------------------------------------------------------------------
-petsRouter.get('/',jsonParser, jwtAuth, (req, res) => {
+petsRouter.get("/", jsonParser, jwtAuth, (req, res) => {
   Pet.find({ user: req.user.id })
-    .populate('user')
+    .populate("user")
     .then(pets => {
-      return res.status(200).json(
-           pets.map(pet => pet.serialize())
-         );;
+      return res.status(200).json(pets.map(pet => pet.serialize()));
     })
     .catch(err => {
       return res.status(500).json(err);
     });
 });
-
 
 // -----------------------------------------------------------------------------
 //                                  GET SINGLE
 // -----------------------------------------------------------------------------
 // Retrieve one pet profile by id
-petsRouter.get('/:petId', jsonParser, jwtAuth, (req, res) => {
-  Pet.findById(req.params.petid)
-    .populate('user')
+petsRouter.get("/:petId", jsonParser, jwtAuth, (req, res) => {
+  Pet.findById(req.params.petId)
+    .populate("user")
     .then(pet => {
       return res.status(200).json(pet.serialize());
     })
     .catch(err => {
       return res.status(500).json(err);
-
     });
 });
-
 
 // -----------------------------------------------------------------------------
 //                                     POST
 // -----------------------------------------------------------------------------
-petsRouter.post('/', jsonParser, jwtAuth, (req, res) => {
+petsRouter.post("/", jsonParser, jwtAuth, (req, res) => {
   console.log(req.user);
   const newPet = {
     user: req.user.id,
@@ -101,12 +91,10 @@ petsRouter.post('/', jsonParser, jwtAuth, (req, res) => {
     });
 });
 
-
-
 // -----------------------------------------------------------------------------
 //                                      PUT
 // -----------------------------------------------------------------------------
-petsRouter.put('/:petid', jsonParser, jwtAuth, (req, res) => {
+petsRouter.put("/:petid", jsonParser, jwtAuth, (req, res) => {
   const updatedPet = {
     user: req.user.id,
     petName: req.body.petName,
@@ -129,15 +117,15 @@ petsRouter.put('/:petid', jsonParser, jwtAuth, (req, res) => {
     return res.status(400).json({ error: validation.error });
   }
   console.log("no validation issue");
-  // Looks for idea by id, if found, updates info
+  // Looks for pet by id, if found, updates info
   Pet.findByIdAndUpdate(req.params.petid, updatedPet)
     .then(() => {
       console.log("update");
-      return res.status(201).end();
+      return res.status(204).end();
     })
     .catch(err => {
       console.log("here");
-      return res.status(500).json(err)
+      return res.status(500).json(err);
     });
 });
 

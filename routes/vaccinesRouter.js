@@ -78,7 +78,4 @@ vaccinesRouter.put('/:petId/:subDocId', jwtAuth, (req, res) => {
         })
 });
 
-
-
-
 module.exports = { vaccinesRouter };
