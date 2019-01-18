@@ -118,10 +118,10 @@ petsRouter.put("/:petid", jsonParser, jwtAuth, (req, res) => {
   }
   console.log("no validation issue");
   // Looks for pet by id, if found, updates info
-  Pet.findByIdAndUpdate(req.params.petid, updatedPet)
-    .then(() => {
-      console.log("update");
-      return res.status(204).end();
+  Pet.findByIdAndUpdate(req.params.petid, { $set: updatedPet}, {new: true})
+    .then(pet => {
+      console.log("getting to pet up before return");
+      return res.status(200).json(pet.serialize());
     })
     .catch(err => {
       console.log("here");

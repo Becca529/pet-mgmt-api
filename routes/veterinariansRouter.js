@@ -35,9 +35,12 @@ veterinariansRouter.post("/:petId", jsonParser, jwtAuth, (req, res) => {
       });
       pet.save();
     })
-    .then(() => {
+
+    Pet.findById(req.params.petId)
+    .then((pet) => {
       console.log("vet info added");
-      return res.status(201).end();
+      return res.status(201).json(pet.serialize());
+      // return res.status(201).end();
     })
     .catch(err => {
       console.log(err);
