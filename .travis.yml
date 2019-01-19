@@ -4,7 +4,8 @@ services:
 - mongodb
 deploy:
   provider: heroku
-  api_key: 43c1d99e-deaa-46c0-9153-85fad6118ea8
+  api_key:
+    secure: BBdE0efDq6mwhZA4W4Q24XOBXbJ+PVp5wVLl6/P/bZJBFnVi5EyrFwygpeELFsxt85AV8OBIYRs7h+/5smRypSP8rmbwaK5UfGOjc/UrZdJWpNCJlknNdlE0abj4Ke/IABmPjEt0jn7kuq4rWgyRxDOqF9609mNfG0TSnCzWTkpBgbhOIF99X28Hm4duqDpBvaVE7Z5G/D2L9Y5iWA4U8VSe+bPnGagpJGBTpjxr5yCbKWOmJ//bWJ2dtQOo8P8vxQPfp7m8muIutJuhXAz+5dRZ42+YEhp+YqlIrRb82Lx2XWKXQ0X50uMIuzW2+FRGF7a28txO8uQqKezCgDtsziLXMtMiqsT8X/EgI6PvaAUGOAi4vkqWkv5UYsB5M3ezOrT/ugL/Xk1q7EmHkwqagDmYplMJyJYq7YKLO0ogjz8t7ymp4pyUpcdCFa3bDTWNykf2TTa/Y2a/aQLne3dCNtToCKIzyxUT+qlPUX7jg8rIKlTv4D6WUkH7jjfnX0dWv+NLiFJ4A7ql8QqVoEnfqgXEXSCDiV0dfoXyaA2UIQ5a42LzCibACJsIwvVtNwQk7yDSeS/WdobEJHBtoPZIrUmUB9+I85FYilJygdwM9apu4B65uiIDi026juEopX6ZzF9w3R/gTSudXVFcIEr4NJgN3B0vehnRc4O3+0eHwZY=
   app: boiling-waters-44703
   on:
     repo: Becca529/pet-mgmt-api
