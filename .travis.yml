@@ -1,8 +1,4 @@
-language: node_js
+ language: node_js
  node_js: node
- services: mongodb
-deploy:
-  provider: heroku
-  app: mysterious-caverns-41257
-  on:
-    repo: Becca529/pet-mgmt-api
+ services:
+     - mongodb
