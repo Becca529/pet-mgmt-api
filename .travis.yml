@@ -1,4 +1,12 @@
- language: node_js
- node_js: node
- services:
-     - mongodb
+language: node_js
+node_js: node
+services:
+- mongodb
+deploy:
+  provider: heroku
+  edge: true
+  api_key:
+    secure: eEHHF24WodT5cqJprzN+sim2HNyFu1g+tls5L16tMtgs1Zu1KkTETqcHCxYKs8tGxR5DMLhZaf8S7ZZw2J2rtzJg5kxLkYHUjHS9tojY2If0fcN1SRp9aUr/1wle11G7KzQj2TqtrWbJTbVpj2HxC6E7eBS0Acd3sF/77Ic4c76zNdMj2xC6QDoLkoQVrFxI/3SDRRv/ejAFwJyU7XjBN55KhMemhgGpVI1G5S/zYSrI8IkVZI1/eoiHVBvtPzBWkQKVITSh+BvVMjvikp1qKN047FRp4wRhW+fih6kpsPQ3ibGw1h3QDsHWkaOVTZIya1nBJv9F6x3lyeMRB6WQt+JeiTumw023aMD7RjwuWLyMf+2EBePhF0Tfl9l2Sf6+xteLNhD/7yrh8yqfR5ASKAkMqVx8s+rtzRkDRLuT+JRLKZ17W66X6GokUodEOVHgNU5YqA5nhtw9oEUUDfUoKl7lag+rvuI0MfpdaVK9TFc20HIBUs3clFtgNz2fpj8JYabch81Dd1TBqtWUwmVWYzKthTZmKFSUyXUyCT4eztcaqgxw94ZuFC5GMgxD1n17aImbz+T3o53HY/UtzMH6657TeU4vAoOxncynuxNRX+cv14WlI0c8tuJjtA3Nb9ZgECx/bi8RtjvuQhIR2IGhSXmRSUsTherB9DJlGKdeafc=
+  app: lit-falls-39259
+  on:
+    repo: Becca529/pet-mgmt-api
