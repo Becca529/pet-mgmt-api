@@ -5,6 +5,6 @@ services:
 deploy:
   provider: heroku
   api_key: 43c1d99e-deaa-46c0-9153-85fad6118ea8
-  app: morning-garden-40435
+  app: boiling-waters-44703
   on:
     repo: Becca529/pet-mgmt-api
