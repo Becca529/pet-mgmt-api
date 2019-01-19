@@ -121,7 +121,7 @@ petsRouter.put("/:petid", jsonParser, jwtAuth, (req, res) => {
   Pet.findByIdAndUpdate(req.params.petid, { $set: updatedPet}, {new: true})
     .then(pet => {
       console.log("getting to pet up before return");
-      return res.status(200).json(pet.serialize());
+      return res.status(204).json(pet.serialize());
     })
     .catch(err => {
       console.log("here");
