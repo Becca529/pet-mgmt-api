@@ -47,10 +47,7 @@ sittersRouter.delete('/:petId/:subDocId', jwtAuth, (req, res) => {
     let petId = req.params.petId;
     console.log("getting to delete");
     Pet.findById(petId)
-        // .then(pet => {
-        //   if (pet.user._id !== req.user._id) {
-        //     //throw errorr - catch error here
-        //   }
+       
     .then(pet => {
         return Pet.findByIdAndUpdate(pet._id, {
             '$pull' : {'petSittingData': {'_id': new ObjectId(subDocId)}}
@@ -66,18 +63,12 @@ sittersRouter.put('/:petId/:subDocId', jwtAuth, (req, res) => {
     let petId = req.params.petId;
     console.log("getting to delete");
     Pet.findById(petId)
-        // .then(pet => {
-        //   if (pet.user._id !== req.user._id) {
-        //     //throw errorr - catch error here
-        //   }
     .then(pet => {
         return Pet.findByIdAndUpdate(pet._id, {
             '$set' : {'petSittingData': {'_id': new ObjectId(subDocId)}}
           })
         })
 });
-
-
 
 
 module.exports = { sittersRouter };

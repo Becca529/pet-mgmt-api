@@ -18,76 +18,138 @@ usersRouter.post("/", (req, res) => {
     password: req.body.password
   };
 
-  //Validate new user information against joi schema
-  const validation = Joi.validate(newUser, UserJoiSchema);
-  if (validation.error) {
-    console.log("joi validation errors");
-    return res.status(400).json({ error: validation.error });
+  const requiredFields = ['username', 'password'];
+  const missingField = requiredFields.find(field => !(field in req.body));
+
+  if (missingField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Missing field',
+      location: missingField
+    });
   }
 
-  //Validate that there is not an existing account with either the provided email or username in MongoDB Step
-  User.findOne({
-    $or: [
-      // { email: newUser.email },
-      { username: newUser.username }
-    ]
-  })
-    .then(user => {
-      if (user) {
-        //if existing email or username found - return status code and error message
-        const error = new Error(
-          "A user with that username and/or email already exists. Please try again."
-        );
-        error.status = 400;
-        return Promise.reject(error);
-      }
-      //If no username/email conflict - hash entered password
-      return User.hashPassword(newUser.password);
-    })
-    .then(passwordHash => {
-      newUser.password = passwordHash;
-      //create new user in mongodb
-      User.create(newUser)
-        .then(createdUser => {
-          //if successful - return newly created user info
-          return res.status(201).json(createdUser.serialize());
-        })
-        .catch(err => {
-          //if error with creating new user - return HTTP status code and error
-          err.status = 500;
-          console.error(err.message);
-          return Promise.reject(err);
+  const stringFields = ['username', 'password', 'firstName', 'lastName'];
+  const nonStringField = stringFields.find(
+    field => field in req.body && typeof req.body[field] !== 'string'
+  );
+
+  if (nonStringField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Incorrect field type: expected string',
+      location: nonStringField
+    });
+  }
+
+
+  const explicityTrimmedFields = ['username', 'password'];
+  const nonTrimmedField = explicityTrimmedFields.find(
+    field => req.body[field].trim() !== req.body[field]
+  );
+
+  if (nonTrimmedField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Cannot start or end with whitespace',
+      location: nonTrimmedField
+    });
+  }
+
+  const sizedFields = {
+    username: {
+      min: 1
+    },
+    password: {
+      min: 6,
+      max: 72
+    }
+  };
+  const tooSmallField = Object.keys(sizedFields).find(
+    field =>
+      'min' in sizedFields[field] &&
+            req.body[field].trim().length < sizedFields[field].min
+  );
+  const tooLargeField = Object.keys(sizedFields).find(
+    field =>
+      'max' in sizedFields[field] &&
+            req.body[field].trim().length > sizedFields[field].max
+  );
+
+  if (tooSmallField || tooLargeField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: tooSmallField
+        ? `Must be at least ${sizedFields[tooSmallField]
+          .min} characters long`
+        : `Must be at most ${sizedFields[tooLargeField]
+          .max} characters long`,
+      location: tooSmallField || tooLargeField
+    });
+  }
+
+  let {username, password, email, firstName = '', lastName = ''} = req.body;
+  // Username and password come in pre-trimmed, otherwise we throw an error
+  // before this
+  firstName = firstName.trim();
+  lastName = lastName.trim();
+
+  return User.find({username})
+    .count()
+    .then(count => {
+      if (count > 0) {
+        return Promise.reject({
+          code: 422,
+          reason: 'ValidationError',
+          message: 'Username already taken',
+          location: 'username'
         });
+      }
+      return User.hashPassword(password);
+    })
+    .then(hash => {
+      return User.create({
+        username,
+        password: hash,
+        firstName,
+        lastName,
+        email
+      });
+    })
+    .then(user => {
+      return res.status(201).json(user.serialize());
     })
     .catch(err => {
-      return res.status(err.status).json({ error: err.message });
+      if (err.reason === 'ValidationError') {
+        return res.status(err.code).json(err);
+      }
+      res.status(500).json({code: 500, message: 'Internal server error'});
     });
 });
 
+
 //Get all users
 usersRouter.get("/", (req, res) => {
-  //Retrieve all users from mongoDb Step 1: Attempt to retrieve all users from the database using Mongoose.Model.find()
   User.find()
     .then(users => {
-      //Return formatted users from serialized method and HTTP status code
       return res.status(200).json(users.map(user => user.serialize()));
     })
     .catch(err => {
-      //If error - return HTTP status code and error
       return res.status(500).json(err);
     });
 });
 
 //Get user by id
 usersRouter.get("/:userid", (req, res) => {
-  //Retrieve specific user from database
   User.findById(req.params.userid)
     .then(user => {
-      //If user id found - return status code and serialized user data
       return res.status(200).json(user.serialize());
     })
     .catch(error => {
-      //If error - return HTTP status code and error
       return res.status(500).json(error);
     });
 });

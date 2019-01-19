@@ -40,7 +40,6 @@ veterinariansRouter.post("/:petId", jsonParser, jwtAuth, (req, res) => {
     .then((pet) => {
       console.log("vet info added");
       return res.status(201).json(pet.serialize());
-      // return res.status(201).end();
     })
     .catch(err => {
       console.log(err);
@@ -84,7 +83,17 @@ veterinariansRouter.put("/:petId/:subDocId", jwtAuth, (req, res) => {
     },
     {
       $set: {
-        "vetData.$.clinicName": req.body.clinicName
+        "vetData.$.clinicName": req.body.clinicName,
+        "vetData.$.addressLine1": req.body.addressLine1,
+        "vetData.$.addressLine2": req.body.addressLine2,
+        "vetData.$.city": req.body.city,
+        "vetData.$.zipCode": req.body.zipCode,
+        "vetData.$.city": req.body.city,
+        "vetData.$.state": req.body.state,
+        "vetData.$.phoneNumber": req.body.phoneNumber,
+        "vetData.$.faxNumber": req.body.faxNumber,
+        "vetData.$.email": req.body.email,
+        "vetData.$.doctor": req.body.doctor
       }
     }
   )
