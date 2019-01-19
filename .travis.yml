@@ -4,8 +4,7 @@ services:
 - mongodb
 deploy:
   provider: heroku
-  api_key:
-    secure: MTxj5Hlpbqud5GyXieDLotvpgSV7XCbf+18V6q46UwlKDQvtrVC3ZDrlckTZZEYgBfHnfUZkmnz495oASaLBjrbwBJBJCk76x7+nrxTxphc5Qu7oDb11j+kOk5PnbILp0bJT0devJGodukUFTHH/5UDhbmhrKy4ves7IbBn+VGho4OOamWAaE3ZlRyPlHlLr1KO6yHp8QMKxdCUIsa65CP05GOP7Z5KowOAETsRYXkAEvYKBwHs920pMrh0nTVJ+cdiSA5uBJ43cmVrAr3lrZa1E/AYX4jMOuA1dV3Hf9IBcw9CG+M85FBjoiPwS+FhL0I9AfKag4QHbQ/MN199ZLHrtNSzk9hYqIo/wIDuP9NgOiO2LZ6rhFOvj4lJWNThjxzYr6vZYbC6vStJu/3XSXp9u8pXGFoM/hT/OfryjMJABlcyBAjjKOiHFnPY8KfypmPzroFj1LBm+mozPW0IIu9lseYTUwFgjRLJAYSauhilnnWPBGewj53Of0SQYY1I2T5f+tv2jR+VWhXaPGgojESh0Q0YQeYnsa3GipOKD6IOapUnNL4hXago3kC9HfncYV/tziiZkaE1CtYL2C6ZP50L0EqK4F4v0vPN5tt8+Jw6kCIKJykNt7u+C3IYgSsOneR0KwsxYE0npQhpMdA0NRXezTe7lurZ7KhfCQNlbjsU=
+  api_key: 43c1d99e-deaa-46c0-9153-85fad6118ea8
   app: morning-garden-40435
   on:
     repo: Becca529/pet-mgmt-api
