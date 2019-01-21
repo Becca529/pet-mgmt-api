@@ -18,7 +18,7 @@ const { localStrategy, jwtStrategy } = require('./auth/auth.strategy');
 const app = express();
 let server;
 
-  app.use(
+app.use(
     cors({
         origin: CLIENT_ORIGIN
     })
