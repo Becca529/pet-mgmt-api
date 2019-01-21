@@ -18,7 +18,7 @@ usersRouter.post("/", (req, res) => {
     password: req.body.password
   };
 
-  const requiredFields = ['username', 'password'];
+  const requiredFields = ['username', 'password', 'email'];
   const missingField = requiredFields.find(field => !(field in req.body));
 
   if (missingField) {
