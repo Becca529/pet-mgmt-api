@@ -116,7 +116,7 @@ describe('tests for api/pets', function () {
         expect(res).to.have.status(200);
         expect(res).to.be.json;
         expect(res.body).to.be.a('object');
-        expect(res.body).to.include.keys('petName', 'type', 'breed', 'sex', 'birthdate', 'personality', 'likes', 'dislikes', 'weight', 'physicalDescription');
+        expect(res.body).to.include.keys('petName', 'type', 'breed', 'sex', 'personality', 'likes', 'dislikes', 'weight', 'physicalDescription');
         expect(res.body).to.deep.include({
           id: searchPet.id,
           petName: searchPet.petName
@@ -184,7 +184,6 @@ describe('tests for api/pets', function () {
       type: faker.lorem.word(),
       breed: faker.lorem.word(),
       sex: faker.lorem.word(),
-      birthdate: faker.date.recent(),
       personality: faker.lorem.word(),
       likes: faker.lorem.word(),
       dislikes: faker.lorem.word(),
