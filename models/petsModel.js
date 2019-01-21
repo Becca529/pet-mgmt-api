@@ -11,7 +11,8 @@ const vetSchema = mongoose.Schema({
   phoneNumber: 'string',
   faxNumber: 'string',
   email: 'string',
-  primaryDoctor: 'string'
+  doctor: 'string',
+  emergencyAfterHours: 'string'
 })
 
 const medicineSchema = mongoose.Schema({
@@ -62,7 +63,6 @@ const petSchema = mongoose.Schema({
   dislikes: 'string',
   physicalDescription: 'string',
   weight: { type: Number },
-  // createDate: { type: Date, default: Date.now },
   vetData: [vetSchema],
   medicineData: [medicineSchema],
   vaccineData: [vaccineSchema],

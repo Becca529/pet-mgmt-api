@@ -31,7 +31,8 @@ veterinariansRouter.post("/:petId", jsonParser, jwtAuth, (req, res) => {
         phoneNumber: req.body.phoneNumber,
         faxNumber: req.body.faxNumber,
         email: req.body.email,
-        doctor: req.body.doctor
+        doctor: req.body.doctor,
+        emergencyAfterHours: req.body.emergencyAfterHours
       });
       pet.save();
     })
@@ -93,7 +94,9 @@ veterinariansRouter.put("/:petId/:subDocId", jwtAuth, (req, res) => {
         "vetData.$.phoneNumber": req.body.phoneNumber,
         "vetData.$.faxNumber": req.body.faxNumber,
         "vetData.$.email": req.body.email,
-        "vetData.$.doctor": req.body.doctor
+        "vetData.$.doctor": req.body.doctor,
+        "vetData.$.emergencyAfterHours": req.body.emergencyAfterHours
+
       }
     }
   )
